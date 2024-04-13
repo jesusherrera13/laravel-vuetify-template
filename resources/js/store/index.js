@@ -37,17 +37,14 @@ const store = createStore({
                     return data;
                 });
         },
-        systemModulos({ commit }, user) {
-            return axiosClient.post('/system-modulos', user.data)
+        systemModules({ commit }, user) {
+            return axiosClient.post('/system-modules', user.data)
                 .then(({ data }) => {
-                    commit('setModulos', data);
+                    commit('setModules', data);
                 })
                 .catch(function (error) {
 
-
                     if (error.response && error.response.data.message == 'Unauthenticated.') {
-                        // router.push({name: 'Login'});
-                        // console.log(error.response.data.message)
                         commit('logout');
                     }
                 })
@@ -69,27 +66,26 @@ const store = createStore({
             state.user.data = {};
             sessionStorage.removeItem(`${import.meta.env.VITE_APP_NAME}_user_data`);
             sessionStorage.removeItem(`${import.meta.env.VITE_APP_NAME}_token`);
+
             router.push({ name: 'Login' });
         },
         toLogin: (state) => {
             router.push({ name: 'Login' });
         },
-        setModulos: (state, modulos) => {
-            modulos.sort((a, b) => {
-                if (a.nombre < b.nombre) return -1;
+        setModules: (state, modules) => {
+            modules.sort((a, b) => {
+                if (a.name < b.name) return -1;
             });
 
-
-            for (var i in modulos) {
-                if (modulos[i].menus) {
-                    modulos[i].menus.sort((a, b) => {
-                        if (a.nombre < b.nombre) return -1;
+            for (var i in modules) {
+                if (modules[i].menus) {
+                    modules[i].menus.sort((a, b) => {
+                        if (a.name < b.name) return -1;
                     });
                 }
             }
 
-
-            state.user.data.modulos = modulos;
+            state.user.data.modules = modules;
         }
     },
     modules: {}

@@ -4,9 +4,27 @@
       max-width="300"
       height="100vh"
     >
+    <v-list density="compact" nav :lines="false">
+        <template v-for="modulo in user.modules" :key="modulo.key">
+          <v-list-subheader v-text="modulo.name"></v-list-subheader>
+          <v-list-item
+            v-for="(item, i) in modulo.menus"
+            :key="i"
+            :value="item"
+            color="primary"
+            :to="item.route"
+          >
+            <template v-slot:prepend>
+              <v-icon :icon="item.mdi_icon"></v-icon>
+            </template>
+    
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+          </v-list-item>
+        </template>
+      </v-list>
 
 
-      <v-list density="compact" nav :lines="false">
+      <!-- <v-list density="compact" nav :lines="false">
         <template v-for="modulo in modulos" :key="modulo">
           <v-list-subheader v-text="modulo.text"></v-list-subheader>
           <v-list-item
@@ -23,12 +41,15 @@
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item>
         </template>
-      </v-list>
+      </v-list> -->
     </v-card>
   </template>
   <script>
+    import store from '../store';
+    import { computed } from 'vue';
     export default {
       data: () => ({
+        user: computed(() => store.state.user.data),
         modulos: [
           { 
             text: 'Sistema', 
@@ -54,5 +75,8 @@
           },
         ],
       }),
+      created() {
+        store.dispatch('systemModules', this.user);
+      }
     }
   </script>

@@ -6,7 +6,6 @@
                     <v-col
                     >
                         <div class="text-h6">{{ title }}</div>
-                        
                     </v-col>
                     <v-col>
                         <slot name="breadcrumbs"></slot>

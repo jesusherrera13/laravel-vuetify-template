@@ -22,6 +22,7 @@
                             clearable
                             variant="outlined"
                             density="compact"
+                            class="mb-3"
                         ></v-text-field>
                     </v-col>
 

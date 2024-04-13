@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\SystemController;
 use App\Models\User;
 
 /*
@@ -38,4 +39,7 @@ Route::get('/v1/rol/{rol}', [RolController::class, 'show']);
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/v1/logout', [AuthController::class, 'logout']);
     Route::get('/v1/rol', [RolController::class, 'index']);
+
+    Route::post('/v1/system-modules', [SystemController::class, 'modules']);
+
 });

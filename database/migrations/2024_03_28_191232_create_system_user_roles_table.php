@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('system_roles', function (Blueprint $table) {
+        Schema::create('system_user_roles', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('name');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_roles');
+        Schema::dropIfExists('system_user_roles');
     }
 };
