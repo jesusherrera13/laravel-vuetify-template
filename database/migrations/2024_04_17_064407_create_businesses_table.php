@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('system_modules', function (Blueprint $table) {
+        Schema::create('businesses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->bigInteger('business_name_id');
+            $table->string('business_name');
             $table->string('key')->unique();
             $table->string('route');
             $table->string('icon')->default('mdi-tag-outline');
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_modules');
+        Schema::dropIfExists('businesses');
     }
 };

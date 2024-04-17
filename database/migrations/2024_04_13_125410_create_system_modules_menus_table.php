@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('key')->unique();
             $table->string('route');
-            $table->string('mdi_icon')->default('mdi-tag-outline');
+            $table->string('icon')->default('mdi-tag-outline');
             $table->tinyInteger('status')->default(1);
             $table->foreignId('module_id')->references('id')->on('system_modules');
             $table->foreignId('created_by')->references('id')->on('users');

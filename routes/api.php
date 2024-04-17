@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SystemController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\CompanyController;
 use App\Models\User;
 
 /*
@@ -27,14 +29,18 @@ Route::get('/v1/user', function() {
 
 Route::get('/v1/user/{user}', [AuthController::class, 'user']);
 Route::put('/v1/user/{user}', [UserController::class, 'update']);
-
 Route::get('/v1/rol/{rol}', [RolController::class, 'show']);
-
 
 /* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 }); */
 
+Route::get('/v1/module', [ModuleController::class, 'index']);
+Route::get('/v1/module/{module}', [ModuleController::class, 'show']);
+
+
+Route::get('/v1/company', [CompanyController::class, 'index']);
+Route::get('/v1/company/{company}', [CompanyController::class, 'show']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/v1/logout', [AuthController::class, 'logout']);

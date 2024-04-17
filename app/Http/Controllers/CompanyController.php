@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Module;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
-class ModuleController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Module::all(), 200);
+        return response()->json(Company::all(), 200);
     }
 
     /**
@@ -26,15 +26,15 @@ class ModuleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Module $module)
+    public function show(Company $company)
     {
-        return response()->json($module, 200);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Module $module)
+    public function update(Request $request, Company $company)
     {
         //
     }
@@ -42,7 +42,7 @@ class ModuleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Module $module)
+    public function destroy(Company $company)
     {
         //
     }

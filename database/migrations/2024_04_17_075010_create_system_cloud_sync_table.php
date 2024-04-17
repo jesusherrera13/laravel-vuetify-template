@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('system_modules', function (Blueprint $table) {
+        Schema::create('system_cloud_sync', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('cloud_domain_id')->references('id')->on('system_cloud_domains');
             $table->string('name');
-            $table->string('key')->unique();
-            $table->string('route');
-            $table->string('icon')->default('mdi-tag-outline');
+            $table->string('url');
+            $table->string('method');
             $table->tinyInteger('status')->default(1);
-            $table->foreignId('created_by')->references('id')->on('users');
-            $table->foreignId('updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_modules');
+        Schema::dropIfExists('system_cloud_sync');
     }
 };

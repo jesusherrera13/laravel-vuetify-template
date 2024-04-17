@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('system_modules', function (Blueprint $table) {
+        Schema::create('system_companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('key')->unique();
-            $table->string('route');
-            $table->string('icon')->default('mdi-tag-outline');
+            $table->bigInteger('company_id');
+            $table->string('company_name');
+            $table->integer('corporate_id');
+            $table->integer('model_company');
+            $table->string('alphanumeric_id_1');
+            $table->string('alphanumeric_id_2');
+            $table->string('alphanumeric_id_3');
             $table->tinyInteger('status')->default(1);
-            $table->foreignId('created_by')->references('id')->on('users');
-            $table->foreignId('updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_modules');
+        Schema::dropIfExists('system_companies');
     }
 };

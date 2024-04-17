@@ -62,61 +62,89 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // MENUS
         $array = [
             [
                 'name' => 'Sistema',
-                'key' => 'system-configuration',
-                'route' => '/system-configuration',
-                'mdi_icon' => 'mdi-security',
+                'key' => 'sistema',
+                'route' => '/system',
+                'icon' => 'mdi-security',
                 'created_at' => date('Y-m-d h:i:s'),
                 'menus' => [
                     [
                         'name' => 'Módulos',
-                        'key' => 'system-modules',
-                        'route' => '/system-modules',
-                        'mdi_icon' => 'mdi-apps',
+                        'key' => 'modules',
+                        'route' => '/modules',
+                        'icon' => 'mdi-apps',
                         'created_at' => date('Y-m-d h:i:s'),
-                        'module_id' => 1
                     ],
                     [
                         'name' => 'Usuarios',
-                        'key' => 'system-users',
-                        'route' => '/system-users',
-                        'mdi_icon' => 'mdi-shield-account',
+                        'key' => 'users',
+                        'route' => '/users',
+                        'icon' => 'mdi-shield-account',
                         'created_at' => date('Y-m-d h:i:s'),
-                        'module_id' => 1
                     ],
                     [
-                        'name' => 'Accesos',
-                        'key' => 'system-access',
-                        'route' => '/system-access',
-                        'mdi_icon' => 'mdi-shield-key',
+                        'name' => 'Sincronización con la nube',
+                        'key' => 'cloud-sync',
+                        'route' => '/cloud-sync',
+                        'icon' => 'mdi-cloud-sync',
                         'created_at' => date('Y-m-d h:i:s'),
-                        'module_id' => 1
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Configuración',
+                'key' => 'configuracion',
+                'route' => '/config',
+                'icon' => 'mdi-cog',
+                'created_at' => date('Y-m-d h:i:s'),
+                'menus' => [
+                    [
+                        'name' => 'Compañías',
+                        'key' => 'companies',
+                        'route' => '/companies',
+                        'icon' => 'mdi-domain',
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ],
+                    [
+                        'name' => 'Empresas',
+                        'key' => 'businesses',
+                        'route' => '/businesses',
+                        'icon' => 'mdi-office-building',
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ],
+                    [
+                        'name' => 'Plazas',
+                        'key' => 'plazas',
+                        'route' => '/plazas',
+                        'icon' => 'mdi-home-group',
+                        'created_at' => date('Y-m-d h:i:s'),
                     ],
                 ]
-            ],
+            ]
         ];
 
         foreach($array as $row) {
 
-            DB::table('system_modules')->insert([
+            $id = DB::table('system_modules')->insertGetId([
                 'name' => $row['name'],
                 'key' => $row['key'],
                 'route' => $row['route'],
-                'mdi_icon' => $row['mdi_icon'],
+                'icon' => $row['icon'],
                 'created_at' => date('Y-m-d h:i:s'),
                 'created_by' => 1,
                 'updated_by' => 1,
             ]);
 
-            foreach($row['menus'] as $rowM) {
+            foreach($row['menus'] as $row2) {
                 DB::table('system_modules_menus')->insert([
-                    'name' => $rowM['name'],
-                    'key' => $rowM['key'],
-                    'route' => $rowM['route'],
-                    'mdi_icon' => $rowM['mdi_icon'],
-                    'module_id' => $rowM['module_id'],
+                    'name' => $row2['name'],
+                    'key' => $row2['key'],
+                    'route' => $row2['route'],
+                    'icon' => $row2['icon'],
+                    'module_id' => $id,
                     'created_at' => date('Y-m-d h:i:s'),
                     'created_by' => 1,
                     'updated_by' => 1,
@@ -124,7 +152,46 @@ class DatabaseSeeder extends Seeder
             }
         }
         // MENUS
+        // $table->string('name');
+        // $table->string('url');
+        // $table->string('method');
 
+        // CLOUD SYNC
+        $array = [
+            [
+                'name' => 'alerta.fortia.com.mx',
+                'created_at' => date('Y-m-d h:i:s'),
+                'items' => [
+                    [
+                        'name' => 'Companies',
+                        'url' => 'https://{dominio}/FortiaPrimeApi.OpenSync/api/v1/organizational-structure/company',
+                        'method' => 'GET',
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ],
+                ],
+            ],
+        ];
 
+        foreach($array as $row) {
+
+            $id = DB::table('system_cloud_domains')->insertGetId([
+                'name' => $row['name'],
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+
+            foreach($row['items'] as $row2) {
+
+                $row2['url'] = str_replace('{dominio}', $row['name'], $row2['url']);
+
+                DB::table('system_cloud_sync')->insert([
+                    'name' => $row2['name'],
+                    'url' => $row2['url'],
+                    'method' => $row2['method'],
+                    'cloud_domain_id' => $id,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+        }
+        // MENUS
     }
 }

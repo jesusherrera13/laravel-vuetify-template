@@ -1,5 +1,5 @@
 <template>
-    <PageComponent title="Perfil de Usuario">
+    <PageComponent title="Módule">
         <template v-slot:breadcrumbs>
             <v-breadcrumbs :items="breadcrumbs">
                 <template v-slot:prepend>
@@ -13,7 +13,7 @@
                         cols="6"
                     >
                     
-                        <h6>{{ usuario_.name }}</h6>
+                        <h6>{{ modulo_.name }}</h6>
                     </v-col>
 
                     <!-- <v-col cols="6" class="text-right">
@@ -43,49 +43,43 @@
                             cols="12"
                         >
                             <v-text-field v-show="false"
-                                v-model="usuario.id"
+                                v-model="modulo.id"
                                 type="hidden"
                             ></v-text-field>
                             <v-text-field
-                                v-model="usuario.name"
+                                v-model="modulo.name"
                                 label="Nombre"
                                 required
                                 density="compact"
                                 variant="outlined"
                             ></v-text-field>
                             <v-text-field
-                                v-model="usuario.email"
-                                label="Email"
-                                hint="Escriba un Email válido"
+                                v-model="modulo.key"
+                                label="key"
+                                hint="Escriba una key"
                                 required
-                                type="email"
-                                :readonly="usuario.id ? true : false"
                                 density="compact"
                                 variant="outlined"
                             ></v-text-field>
                             <v-text-field
-                                v-show="!usuario.id"
-                                v-model="usuario.password"
-                                label="Password"
-                                persistent-hint
+                                v-model="modulo.route"
+                                label="Route"
+                                hint="Escriba una ruta"
                                 required
-                                type="password"
-                                :readonly="usuario.id  && !password_reset ? true : false"
                                 density="compact"
                                 variant="outlined"
                             ></v-text-field>
                             <v-text-field
-                                v-show="!usuario.id"
-                                v-model="usuario.password_confirmation"
-                                label="Password confirmation"
+                                v-model="modulo.mdi_icon"
+                                label="Icon"
+                                hint="Icon"
                                 required
-                                type="password"
-                                :readonly="usuario.id  && !password_reset ? true : false"
+                                :readonly="modulo.id ? true : false"
                                 density="compact"
                                 variant="outlined"
                             ></v-text-field>
                             <v-select
-                                v-model="usuario.rol_id"
+                                v-model="modulo.rol_id"
                                 label="Rol"
                                 item-value="id"
                                 item-title="nombre"
@@ -102,7 +96,7 @@
                                 Guardar
                             </v-btn>
                             <v-btn
-                                v-if="usuario.id"
+                                v-if="modulo.id"
                                 size="small"
                                 color="secondary"
                                 class="me-2"
@@ -110,31 +104,23 @@
                             >
                                 Cancelar
                             </v-btn>
-                            <!-- <v-spacer></v-spacer> -->
-                            <v-btn
-                                v-if="usuario.id"
-                                size="small"
-                                color="success"
-                                @click="edit=!edit"
-                            >
-                                Password reset
-                            </v-btn>
                         </v-col>
                     </v-row>
                     <v-row v-else cols="3">
                         <v-col
                             cols="12"
                         >
-                            <div class="text-h6">{{ usuario.name }}</div>
-                            <div>{{ usuario.email }}</div>
-                            <div>{{ usuario.rol_id }}</div>
+                            <div class="text-h6">{{ modulo.name }}</div>
+                            <div>{{ modulo.email }}</div>
+                            <div>{{ modulo.key }}</div>
+                            <div>{{ modulo.route }}</div>
                             <v-btn
                                 size="small"
                                 @click="edit =!edit"
                                 class="mr-1"
                                 density="default"
                             >
-                                Editar perfil
+                                Editar
                             </v-btn>
                         </v-col>
                     </v-row>
@@ -146,7 +132,7 @@
         </template>
 
     </PageComponent>
-    <v-row justify="center">
+    <!-- <v-row justify="center">
         <v-dialog
             v-model="dialog"
             persistent
@@ -188,16 +174,16 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-row>
+    </v-row> -->
     <Overlay v-if="loading" />
 </template>
 <script>
 
-import store from '../../../store';
+import store from '../../../../store';
 import { computed } from 'vue';
-import axiosClient from '../../../axios';
-import PageComponent from '../../PageComponent.vue'
-import Overlay from '../../Overlay.vue';
+import axiosClient from '../../../../axios';
+import PageComponent from '../../../PageComponent.vue'
+import Overlay from '../../../Overlay.vue';
 
 export default {
     data() {
@@ -207,12 +193,12 @@ export default {
             dialog: false,
             password_reset: false,
             user: computed(() => store.state.user.data),
-            usuario: {},
-            usuario_: {},
+            modulo: {},
+            modulo_: {},
             breadcrumbs: [
                 { title: 'Dashboard', disabled: false, href: '/' },
-                { title: 'Usuarios', disabled: false, href: '/users' },
-                { title: 'Nuevo', disabled: false, href: '/user/new' },
+                { title: 'Módulos', disabled: false, href: '/modules' },
+                { title: 'Nuevo', disabled: false, href: '/module/new' },
             ],
             search: '',
             itemsPerPage: 20,
@@ -226,7 +212,7 @@ export default {
                 { id: 1, nombre: 'Activo' },
                 { id: 2, nombre: 'Inctivo' },
             ],
-            usuarios: [],
+            modulos: [],
             system_roles: [],
         }
     },
@@ -234,21 +220,21 @@ export default {
         
         if(parseInt(this.$route.params.id)) {
             this.initReg();
-            this.getUser();
+            this.getData();
         }
         else {
             this.edit = 1;
         }
     },
     methods: {
-        async getUser() {
+        async getData() {
             let _this = this;
             this.loading = true;
 
-            axiosClient.get(`/user/${this.$route.params.id}`)
+            axiosClient.get(`/module/${this.$route.params.id}`)
                 .then(response => {
-                    _this.usuario = response.data;
-                    _this.usuario_ = {..._this.usuario};
+                    _this.modulo = response.data;
+                    _this.modulo_ = {..._this.modulo};
                     _this.loading = false;
                 })
                 .catch(function (error) {
@@ -279,13 +265,13 @@ export default {
 
             let url = '';
             let payload = {
-                ...this.usuario,
+                ...this.modulo,
                 cuenta_id: this.user.cuenta_id
             };
 
-            if(this.usuario.id) {
+            if(this.modulo.id) {
 
-                url += `/user/${this.usuario.id}`;
+                url += `/user/${this.modulo.id}`;
                 payload._method = 'PUT';
             }
             else url += `/register`;
@@ -293,7 +279,7 @@ export default {
             axiosClient.post(`${url}`, payload, this.requestHeaders())
                 .then(response => {
                     _this.initReg();
-                    _this.getUser();
+                    _this.getData();
                     _this.dialog = false;
                     _this.loading = false;
                 })
@@ -306,7 +292,7 @@ export default {
             this.dialog = true;
         },
         editItem (item) {
-            this.usuario = {...item};
+            this.modulo = {...item};
             this.dialog = true;
         },
         deleteItem (item) {
@@ -315,19 +301,19 @@ export default {
             this.dialogDelete = true
         },
         setResetPassword () {
-            this.usuario.password = null;
-            this.usuario.password_confirmation = null;
+            this.modulo.password = null;
+            this.modulo.password_confirmation = null;
             this.password_reset = !this.password_reset;
         },
         initReg() {
-            this.usuario = { id: null, name: null, email: null, password: null, rol_id: 1 };
+            this.modulo = { id: null, name: null, email: null, password: null, rol_id: 1 };
         },
         requestHeaders() {
             return {headers: { Authorization: `Bearer ${this.token}` }};
         },
         toggleEdit() {
-            this.edit=!this.edit;
-            this.usuario = {...this.usuario_};
+            this.edit = !this.edit;
+            this.modulo = {...this.modulo_};
         }
     },
     components: {
@@ -335,8 +321,7 @@ export default {
         Overlay,
     },
     watch: {
-        usuario(val, oldval) {
-            // console.log(val)
+        modulo(val, oldval) {
         }
     }
 }

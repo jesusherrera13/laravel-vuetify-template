@@ -15,7 +15,7 @@
             :to="item.route"
           >
             <template v-slot:prepend>
-              <v-icon :icon="item.mdi_icon"></v-icon>
+              <v-icon :icon="item.icon"></v-icon>
             </template>
     
             <v-list-item-title v-text="item.name"></v-list-item-title>
