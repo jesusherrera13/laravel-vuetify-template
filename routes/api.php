@@ -8,6 +8,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Models\User;
 
 /*
@@ -41,6 +42,8 @@ Route::get('/v1/module/{module}', [ModuleController::class, 'show']);
 
 Route::get('/v1/company', [CompanyController::class, 'index']);
 Route::get('/v1/company/{company}', [CompanyController::class, 'show']);
+
+Route::post('/v1/dashboard', [DashboardController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/v1/logout', [AuthController::class, 'logout']);
